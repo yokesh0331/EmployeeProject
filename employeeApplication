@@ -1,0 +1,13 @@
+package com.app.employee;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+//https://www.javaguides.net/2019/01/springboot-postgresql-jpa-hibernate-crud-restful-api-tutorial.html
+@SpringBootApplication
+public class EmployeeApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(EmployeeApplication.class, args);
+	}
+
+}
