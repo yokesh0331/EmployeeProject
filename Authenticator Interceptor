@@ -1,0 +1,49 @@
+package com.app.employee.interceptor;
+
+import java.util.Enumeration;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.HandlerInterceptor;
+import org.springframework.web.servlet.ModelAndView;
+
+import com.app.employee.entity.User;
+import com.app.employee.repository.UserRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+@Component
+public class AunthenticatorInterceptor implements HandlerInterceptor{
+	@Autowired
+	private UserRepository userrepository;
+	public boolean reqt;
+	@Override
+	   public boolean preHandle(
+	      HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+		System.out.println("Pre Handle method is Calling");
+		String username=request.getHeader("usr");
+		String password=request.getHeader("pwd");
+		System.out.println("Pre Handle method is Calling"+username+","+password);
+		User user=userrepository.findByuserName(username);
+		if(user.getUserName().equals(username) && user.getPassword().equals(password)) {
+			reqt=true;
+		}else
+		  {
+			reqt=false;
+		}
+		//return request;		
+	      return reqt;
+	   }
+	   @Override
+	   public void postHandle(
+	      HttpServletRequest request, HttpServletResponse response, Object handler, 
+	      ModelAndView modelAndView) throws Exception {System.out.println("post Handle method is Calling");
+	      }
+	   
+	   @Override
+	   public void afterCompletion(HttpServletRequest request, HttpServletResponse response, 
+	      Object handler, Exception exception) throws Exception {System.out.println("after Completion method is Calling");
+	      }
+	}
+
