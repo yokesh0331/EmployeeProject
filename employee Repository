@@ -1,0 +1,12 @@
+package com.app.employee.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.app.employee.entity.Employee;
+import com.app.employee.entity.User;
+
+
+public interface EmployeeRepository extends JpaRepository<Employee, Long>{
+
+	Employee findByfirstName(String firstName);
+}
