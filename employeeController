@@ -1,0 +1,62 @@
+package com.app.employee.controller;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.app.employee.entity.Employee;
+import com.app.employee.repository.EmployeeRepository;
+
+@RestController
+@RequestMapping("/api/v1")
+public class EmployeeController {
+
+	
+	@Autowired
+	private EmployeeRepository employeeRepository;
+	public String request;
+	public List<Employee> emp;
+	static HashMap<Long, Employee> cache = new HashMap<Long, Employee>();
+
+	// get all employees
+	@GetMapping("/employees")
+	public List<Employee> getAllEmployees() {
+		Employee employ = new Employee();
+		if (cache.isEmpty()) {
+			emp = employeeRepository.findAll();
+			emp.stream().forEach(e -> {
+				employ.setId(e.getId());
+				employ.setLastName(e.getLastName());
+				employ.setFirstName(e.getFirstName());
+				employ.setEmailId(e.getEmailId());
+				cache.put(e.getId(), employ);
+			});
+			System.out.println("emp list" + cache);
+		} 
+		return emp;
+	}
+
+	@GetMapping("/employees/{firstName}")
+	public Employee getAllEmployees(@PathVariable String firstName) {
+		System.out.println("firstName:"+firstName);
+		Employee employeeDetails=new Employee();
+			 employeeDetails=employeeRepository.findByfirstName(firstName);	
+		
+		return employeeDetails;
+	}
+
+	@PostMapping("/employees")
+	public Employee createEmployee(@RequestBody Employee employee) {
+		System.out.println(employee.getFirstName());
+
+		return employeeRepository.save(employee);
+	}
+}
